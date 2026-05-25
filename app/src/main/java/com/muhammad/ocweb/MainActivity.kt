@@ -171,6 +171,9 @@ class MainActivity : AppCompatActivity() {
         swipeRefresh.setColorSchemeResources(
             com.google.android.material.R.color.material_dynamic_primary50
         )
+        swipeRefresh.setOnChildScrollUpCallback { _, _ ->
+            webView.canScrollVertically(-1)
+        }
     }
 
     private fun setupFab() {
