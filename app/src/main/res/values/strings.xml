@@ -9,6 +9,8 @@
     <string name="settings_credentials">Username / Password</string>
     <string name="settings_toggle_theme">Toggle Dark/Light Theme</string>
     <string name="settings_reload">Reload</string>
+    <string name="switch_to_railway">Switch to Railway (remote)</string>
+    <string name="switch_to_local">Switch to Local (Termux)</string>
     <string name="url_dialog_title">Enter Server URL</string>
     <string name="credentials_dialog_title">Server Login</string>
     <string name="credential_username_hint">Username</string>

@@ -35,8 +35,9 @@ class MainActivity : AppCompatActivity() {
     private var serverPassword: String = ""
 
     companion object {
-        private const val DEFAULT_URL = "https://oc-muhammad-server-production.up.railway.app"
+        private const val DEFAULT_URL = "http://127.0.0.1:4096"
         private const val DEFAULT_USERNAME = "opencode"
+        private const val RAILWAY_URL = "https://oc-muhammad-server-production.up.railway.app"
         private const val PREFS_NAME = "oc_webview_prefs"
         private const val KEY_SERVER_URL = "server_url"
         private const val KEY_USERNAME = "server_username"
@@ -185,7 +186,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showSettingsDialog() {
+        val isOnRailway = serverUrl.contains("railway.app")
         val items = arrayOf(
+            if (isOnRailway) getString(R.string.switch_to_local) else getString(R.string.switch_to_railway),
             getString(R.string.settings_change_url),
             getString(R.string.settings_credentials),
             getString(R.string.settings_toggle_theme),
@@ -193,13 +196,30 @@ class MainActivity : AppCompatActivity() {
         )
 
         MaterialAlertDialogBuilder(this)
-            .setTitle(getString(R.string.settings_title) + " — OC Muhammad")
+            .setTitle("OC Muhammad — ${serverUrl.takeLast(30)}")
             .setItems(items) { _, which ->
                 when (which) {
-                    0 -> showUrlInputDialog()
-                    1 -> showCredentialsDialog()
-                    2 -> toggleTheme()
-                    3 -> loadUrlWithAuth()
+                    0 -> {
+                        if (isOnRailway) {
+                            serverUrl = DEFAULT_URL
+                            serverUsername = DEFAULT_USERNAME
+                            serverPassword = ""
+                        } else {
+                            serverUrl = RAILWAY_URL
+                            serverUsername = DEFAULT_USERNAME
+                            serverPassword = "125694123"
+                        }
+                        prefs.edit()
+                            .putString(KEY_SERVER_URL, serverUrl)
+                            .putString(KEY_USERNAME, serverUsername)
+                            .putString(KEY_PASSWORD, serverPassword)
+                            .apply()
+                        loadUrlWithAuth()
+                    }
+                    1 -> showUrlInputDialog()
+                    2 -> showCredentialsDialog()
+                    3 -> toggleTheme()
+                    4 -> loadUrlWithAuth()
                 }
             }
             .show()
